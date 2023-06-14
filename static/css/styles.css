@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #a5a5a5;
+    padding: 20px;
+    margin: 0;
+}
+
+.movie {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.movie img {
+    width: 200px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.movie h2 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.movie p {
+    margin: 10px 0;
+}
+
+.movie p:first-child {
+    font-weight: bold;
+}
+.movie {
+    display: flex;
+}
+.block {
+    display: block;
+    margin-left: 15px;
+}

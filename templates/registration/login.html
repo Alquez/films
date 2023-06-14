@@ -1,0 +1,17 @@
+{% block content %}
+    <h1>Login</h1>
+    <hr>
+
+    {% if form.errors %}
+        {{ form.errors.error }}
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="post">
+        {{ form }}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">submit</button>
+    </form>
+    {{ user }}
+    <a href="{% url 'password_reset' %}">Forgot password?</a>
+    <a href="{% url 'register' %}">Register?</a>
+{% endblock %}

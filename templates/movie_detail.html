@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ movie.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="movie">
+        <img src="{{ movie.image.url }}" alt="{{ movie.name }}" style="max-width: 200px; max-height: 300px;">
+        <div class="block">
+            <h2>{{ movie.name }}</h2>
+            <p>Описание: {{ movie.description }}</p>
+            <p>Год: {{ movie.year }}</p>
+
+            <form method="post" class="form-inline">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit" class="btn btn-primary">Сохранить оценку</button>
+            </form>
+            {% if user.is_authenticated %}
+                {% with rating=movie.rating_set.filter.first %}
+                    {% if rating %}
+                        <p>Ваша оценка: {{ rating.star }}</p>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+            {% if movie.average_rating %}
+                <p>Средняя оценка: {{ movie.average_rating|floatformat:1 }}</p>
+            {% endif %}
+            {% if movie.directors is not None %}
+                <p>Режиссер: {{ movie.directors.name }}</p>
+            {% endif %}
+            <p>
+                Актеры:
+                {% for each_actor in movie.actor.all %}
+                    {{ each_actor.name }}
+                {% endfor %}
+            </p>
+            <p>
+                Жанры:
+                {% for genre in movie.genre.all %}
+                    {{ genre.name }}
+                {% endfor %}
+            </p>
+            <h3>Комментарии</h3>
+            <ul>
+                {% for comment in movie.comments.all %}
+                    <li>{{ comment.name }}: {{ comment.message }}</li>
+                {% endfor %}
+            </ul>
+
+            <form method="post" class="comment-form">
+                {% csrf_token %}
+                <label for="author">Имя:</label>
+                <input type="text" name="name" id="author" required>
+                <label for="message">Сообщение:</label>
+                <textarea name="message" id="message" required></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

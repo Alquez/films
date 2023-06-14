@@ -1,0 +1,45 @@
+{% block movies %}
+        {% if movies %}
+            <div class="movie-list">
+                {% for movie in movies %}
+                    <div class="movie">
+                        <a href="{% url 'movie_detail' movie.slug %}">
+                            <img src="{{ movie.image.url }}" alt="{{ movie.name }}">
+                        </a>
+                        <div class="block">
+                            <h2>{{ movie.name }}</h2>
+                            <p>Описание: {{ movie.description }}</p>
+                            <style>
+                                .button {
+                                    display: inline-block;
+                                    padding: 10px 20px;
+                                    background-color: #4CAF50;
+                                    color: white;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    font-weight: bold;
+                                    transition: background-color 0.3s ease;
+                                }
+
+                                .button:hover {
+                                    background-color: #45a049;
+                                }
+
+                                .button:active {
+                                    background-color: #3e8e41;
+                                }
+                            </style>
+                            <a href="{% url 'movie_detail' movie.slug %}" class="button">Смотреть фильм</a>
+                            {% if movie.is_exclusive %}
+                                <p>ПРЕМИУМ ФИЛЬМ</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Ничего не найдено.</p>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Ничего не найдено.</p>
+        {% endif %}
+    {% endblock %}

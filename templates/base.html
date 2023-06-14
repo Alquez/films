@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gidonline</title>
+    <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+
+    <style>
+        .image-logo {
+            width: 200px; /* Задайте требуемую ширину */
+            height: auto; /* Автоматический расчет высоты */
+        }
+    </style>
+    <a href="{% url 'home' %}">
+        <img  src="{% static 'images/gidonline.png' %}" alt="Логотип сайта" class="image-logo">
+    </a>
+    <hr>
+    {{ user }}
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+
+    <form method="GET" action="{% url 'home' %}">
+        <input type="text" name="search_query" placeholder="Поиск фильмов">
+        <button type="submit">Поиск</button>
+    </form>
+    <form method="get" class="filter-form">
+        <label for="genre">Фильтр по жанру:</label>
+        <select name="genre" id="genre">
+            <option value="">Все жанры</option>
+            {% for genre in genres %}
+                <option value="{{ genre.slug }}" {% if genre_slug == genre.slug %}selected{% endif %}>{{ genre.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="year">Фильтр по году:</label>
+        <select name="year" id="year">
+            <option value="">Все годы</option>
+            {% for movie_year in movie_years %}
+                <option value="{{ movie_year }}" {% if year == movie_year %}selected{% endif %}>{{ movie_year }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Применить</button>
+    </form>
+    <hr>
+
+    <div class="movies">
+        {% block movies %}
+        {% endblock %}
+    </div>
+
+    <div class="movie-details">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% if show_pagination %}
+        <div class="pagination">
+            {% if movies.has_previous %}
+                <a href="?{% if genre %}genre={{ genre }}&{% endif %}{% if year %}year={{ year }}&{% endif %}page={{ movies.previous_page_number }}"><<</a>
+            {% endif %}
+
+            {% for page_number in movies.paginator.page_range %}
+                {% if page_number == movies.number %}
+                    <span class="current-page">{{ page_number }}</span>
+                {% else %}
+                    <a href="?{% if genre %}genre={{ genre }}&{% endif %}{% if year %}year={{ year }}&{% endif %}page={{ page_number }}">{{ page_number }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if movies.has_next %}
+                <a href="?{% if genre %}genre={{ genre }}&{% endif %}{% if year %}year={{ year }}&{% endif %}page={{ movies.next_page_number }}">>></a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</body>
+</html>
